@@ -158,39 +158,60 @@ export default function BlogList({ initialPosts, stats }: BlogListProps) {
               />
             </div>
 
-            <div className="flex flex-wrap gap-4 mb-8">
-              <select
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value as 'desc' | 'asc')}
-                className={`px-4 py-2 rounded-lg ${
-                  theme === 'dark'
-                    ? 'bg-gray-800 text-white'
-                    : 'bg-white text-gray-900'
-                }`}
-              >
-                <option value="desc">En Yeni</option>
-                <option value="asc">En Eski</option>
-              </select>
-
-              <button
-                onClick={() => setIsTagsPanelOpen(!isTagsPanelOpen)}
-                className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
-                  theme === 'dark'
-                    ? 'bg-gray-800 text-white hover:bg-gray-700'
-                    : 'bg-white text-gray-900 hover:bg-gray-50'
-                }`}
-              >
-                <span>Etiketler</span>
-                {selectedTags.length > 0 && (
-                  <span className={`px-2 py-0.5 text-sm rounded-full ${
+            <div className="flex flex-wrap items-center justify-between mb-8">
+              <div className="flex flex-wrap items-center gap-4">
+                <select
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value as 'desc' | 'asc')}
+                  className={`px-4 py-2 rounded-lg ${
                     theme === 'dark'
-                      ? 'bg-gray-700 text-gray-300'
-                      : 'bg-gray-200 text-gray-700'
-                  }`}>
-                    {selectedTags.length}
-                  </span>
-                )}
-              </button>
+                      ? 'bg-gray-800 text-white'
+                      : 'bg-white text-gray-900'
+                  }`}
+                >
+                  <option value="desc">En Yeni</option>
+                  <option value="asc">En Eski</option>
+                </select>
+
+                <button
+                  onClick={() => setIsTagsPanelOpen(!isTagsPanelOpen)}
+                  className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
+                    theme === 'dark'
+                      ? 'bg-gray-800 text-white hover:bg-gray-700'
+                      : 'bg-white text-gray-900 hover:bg-gray-50'
+                  }`}
+                >
+                  <span>Etiketler</span>
+                  {selectedTags.length > 0 && (
+                    <span className={`px-2 py-0.5 text-sm rounded-full ${
+                      theme === 'dark'
+                        ? 'bg-gray-700 text-gray-300'
+                        : 'bg-gray-200 text-gray-700'
+                    }`}>
+                      {selectedTags.length}
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 mt-4 sm:mt-0">
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
+                  className={`px-4 py-2 rounded-lg ${
+                    theme === 'dark'
+                      ? 'bg-gray-800 text-white'
+                      : 'bg-white text-gray-900'
+                  }`}
+                >
+                  {ITEMS_PER_PAGE_OPTIONS.map(option => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
+                <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                  yazı/sayfa
+                </span>
+              </div>
             </div>
 
             {isTagsPanelOpen && (
@@ -284,26 +305,6 @@ export default function BlogList({ initialPosts, stats }: BlogListProps) {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="mt-8 flex flex-col gap-4">
-                {/* Items per page selector */}
-                <div className="flex justify-end items-center gap-2 text-sm">
-                  <select
-                    value={itemsPerPage}
-                    onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
-                    className={`px-2 py-1 rounded-lg ${
-                      theme === 'dark'
-                        ? 'bg-gray-800 text-white'
-                        : 'bg-white text-gray-900'
-                    }`}
-                  >
-                    {ITEMS_PER_PAGE_OPTIONS.map(option => (
-                      <option key={option} value={option}>{option}</option>
-                    ))}
-                  </select>
-                  <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                    yazı/sayfa
-                  </span>
-                </div>
-
                 {/* Page navigation */}
                 <div className="flex justify-center gap-1">
                   <button
