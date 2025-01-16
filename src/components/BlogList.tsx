@@ -127,15 +127,15 @@ export default function BlogList({ initialPosts, stats }: BlogListProps) {
 
         {/* Sosyal medya linkleri */}
         <div className="flex gap-4 mb-8">
-          <a href="https://linkedin.com/in/YOUR_USERNAME" target="_blank" rel="noopener noreferrer" 
+          <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" 
              className={`${theme === 'dark' ? 'text-gray-400 hover:text-blue-400' : 'text-gray-600 hover:text-blue-600'} transition-colors`}>
             LinkedIn
           </a>
-          <a href="https://youtube.com/@YOUR_CHANNEL" target="_blank" rel="noopener noreferrer"
+          <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer"
              className={`${theme === 'dark' ? 'text-gray-400 hover:text-red-500' : 'text-gray-600 hover:text-red-600'} transition-colors`}>
             YouTube
           </a>
-          <a href="https://twitter.com/YOUR_USERNAME" target="_blank" rel="noopener noreferrer"
+          <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer"
              className={`${theme === 'dark' ? 'text-gray-400 hover:text-blue-500' : 'text-gray-600 hover:text-blue-600'} transition-colors`}>
             Twitter
           </a>
@@ -283,15 +283,13 @@ export default function BlogList({ initialPosts, stats }: BlogListProps) {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="mt-8 flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
-                    Sayfa başına:
-                  </span>
+              <div className="mt-8 flex flex-col gap-4">
+                {/* Items per page selector */}
+                <div className="flex justify-end items-center gap-2 text-sm">
                   <select
                     value={itemsPerPage}
                     onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
-                    className={`px-3 py-1 rounded-lg ${
+                    className={`px-2 py-1 rounded-lg ${
                       theme === 'dark'
                         ? 'bg-gray-800 text-white'
                         : 'bg-white text-gray-900'
@@ -301,45 +299,75 @@ export default function BlogList({ initialPosts, stats }: BlogListProps) {
                       <option key={option} value={option}>{option}</option>
                     ))}
                   </select>
+                  <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                    yazı/sayfa
+                  </span>
                 </div>
 
-                <div className="flex gap-2">
+                {/* Page navigation */}
+                <div className="flex justify-center gap-1">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className={`px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed ${
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm ${
                       theme === 'dark'
                         ? 'bg-gray-800 text-white hover:bg-gray-700'
                         : 'bg-white text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    ← Önceki
+                    ←
                   </button>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`px-4 py-2 rounded-lg ${
-                        currentPage === page
-                          ? 'bg-blue-500 text-white'
-                          : theme === 'dark'
-                            ? 'bg-gray-800 text-white hover:bg-gray-700'
-                            : 'bg-white text-gray-900 hover:bg-gray-100'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
+                  
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
+                    // Sadece mevcut sayfayı ve yanındaki bir sayfayı göster
+                    if (
+                      page === 1 ||
+                      page === totalPages ||
+                      Math.abs(currentPage - page) <= 1
+                    ) {
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm ${
+                            currentPage === page
+                              ? 'bg-blue-500 text-white'
+                              : theme === 'dark'
+                                ? 'bg-gray-800 text-white hover:bg-gray-700'
+                                : 'bg-white text-gray-900 hover:bg-gray-100'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    } else if (
+                      (page === 2 && currentPage > 3) ||
+                      (page === totalPages - 1 && currentPage < totalPages - 2)
+                    ) {
+                      return (
+                        <span
+                          key={page}
+                          className={`w-8 h-8 flex items-center justify-center ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                          }`}
+                        >
+                          ⋯
+                        </span>
+                      );
+                    }
+                    return null;
+                  })}
+
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className={`px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed ${
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm ${
                       theme === 'dark'
                         ? 'bg-gray-800 text-white hover:bg-gray-700'
                         : 'bg-white text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    Sonraki →
+                    →
                   </button>
                 </div>
               </div>
