@@ -3,15 +3,14 @@ import BlogPost from '../../../components/BlogPost';
 import { Metadata } from 'next';
 
 interface Props {
-  params: Promise<{
+  params: {
     id: string;
-  }>;
-  searchParams: Record<string, string>;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const resolvedParams = await params;
-  const id = resolvedParams.id.toString();
+  const id = params.id.toString();
   const postData = await getPostData(id);
   return {
     title: postData.title,
@@ -27,8 +26,7 @@ export async function generateStaticParams() {
 }
 
 export default async function Post({ params }: Props) {
-  const resolvedParams = await params;
-  const id = resolvedParams.id.toString();
+  const id = params.id.toString();
   const postData = await getPostData(id);
   
   // İlgili yazıları al
